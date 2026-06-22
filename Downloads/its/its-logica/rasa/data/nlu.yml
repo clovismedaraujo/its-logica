@@ -1,0 +1,141 @@
+version: "3.1"
+
+nlu:
+
+- intent: saudacao
+  examples: |
+    - oi
+    - olá
+    - ola
+    - bom dia
+    - boa tarde
+    - boa noite
+    - ei
+    - hey
+    - olá tutor
+    - oi tudo bem
+
+- intent: despedida
+  examples: |
+    - tchau
+    - até logo
+    - até mais
+    - falou
+    - até
+    - obrigado
+    - valeu
+    - obrigado pela ajuda
+    - foi ótimo
+
+- intent: pedir_dica
+  examples: |
+    - me dá uma dica
+    - pode me dar uma dica
+    - preciso de uma dica
+    - dica
+    - me ajuda
+    - pode me ajudar
+    - não sei a resposta
+    - não faço ideia
+    - tô perdido
+    - tô travado
+    - qual seria a dica
+    - alguma dica
+    - me dá um hint
+    - como eu penso nisso
+    - como resolver
+
+- intent: nao_entendeu
+  examples: |
+    - não entendi
+    - nao entendi
+    - não entendo
+    - não compreendi
+    - tô confuso
+    - ficou confuso
+    - não tô entendendo
+    - não consigo entender
+    - isso não faz sentido
+    - como assim
+    - pode explicar
+    - pode explicar melhor
+    - explica de novo
+    - explica com outras palavras
+    - não ficou claro
+    - o que é um algoritmo
+    - o que é algoritmo
+    - o que é uma variável
+    - o que é variável
+    - o que é condicional
+    - o que é uma função
+    - o que é um vetor
+    - o que é um loop
+    - o que é repetição
+    - o que são operadores
+    - como funciona o if
+    - como funciona o for
+    - como funciona o while
+    - explica algoritmo
+    - explica variável
+    - explica condicional
+    - me explica isso
+    - me explica melhor
+    - quero entender melhor
+    - não to entendendo o conceito
+
+- intent: resposta_incorreta
+  examples: |
+    - errei
+    - errei de novo
+    - errei a questão
+    - respondi errado
+    - errei essa
+    - não acertei
+    - errei mais uma
+    - de novo errei
+    - não consigo acertar
+    - tô errando tudo
+    - errei pela segunda vez
+    - ugh errei
+
+- intent: resposta_correta
+  examples: |
+    - acertei
+    - acertei a questão
+    - consegui
+    - acertei essa
+    - finalmente acertei
+    - que bom que acertei
+    - entendi e acertei
+    - acertei de primeira
+    - fui bem
+    - mandei bem
+    - acertei!
+    - consegui acertar
+
+- intent: definir_topico
+  examples: |
+    - tópico: [algoritmos](topico)
+    - estou em [algoritmos](topico)
+    - estudando [algoritmos](topico)
+    - tópico: [variaveis](topico)
+    - estou em [variaveis](topico)
+    - estudando [variaveis](topico)
+    - tópico: [entrada_saida](topico)
+    - estou em [entrada_saida](topico)
+    - estudando [entrada_saida](topico)
+    - tópico: [operadores](topico)
+    - estou em [operadores](topico)
+    - estudando [operadores](topico)
+    - tópico: [condicionais](topico)
+    - estou em [condicionais](topico)
+    - estudando [condicionais](topico)
+    - tópico: [repeticao](topico)
+    - estou em [repeticao](topico)
+    - estudando [repeticao](topico)
+    - tópico: [funcoes](topico)
+    - estou em [funcoes](topico)
+    - estudando [funcoes](topico)
+    - tópico: [vetores](topico)
+    - estou em [vetores](topico)
+    - estudando [vetores](topico)

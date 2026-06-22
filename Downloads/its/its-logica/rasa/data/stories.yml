@@ -1,0 +1,30 @@
+version: "3.1"
+
+stories:
+
+- story: Conversa basica
+  steps:
+    - intent: saudacao
+    - action: utter_saudacao
+    - intent: pedir_dica
+    - action: action_give_hint
+    - intent: resposta_correta
+    - action: utter_resposta_correta
+    - intent: despedida
+    - action: utter_despedida
+
+- story: Aluno travado
+  steps:
+    - intent: nao_entendeu
+    - action: action_explain
+    - intent: pedir_dica
+    - action: action_give_hint
+    - intent: resposta_incorreta
+    - action: utter_resposta_incorreta
+
+- story: Aluno acertando
+  steps:
+    - intent: pedir_dica
+    - action: action_give_hint
+    - intent: resposta_correta
+    - action: utter_resposta_correta

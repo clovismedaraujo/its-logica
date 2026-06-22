@@ -1,0 +1,104 @@
+version: "3.1"
+
+intents:
+  - saudacao
+  - despedida
+  - pedir_dica
+  - nao_entendeu
+  - resposta_incorreta
+  - resposta_correta
+  - definir_topico
+
+entities:
+  - topico
+
+slots:
+  topico_atual:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: topico
+
+responses:
+  utter_saudacao:
+    - text: "Olá! Sou seu tutor de lógica de programação 🧠 Posso te dar dicas, explicar conceitos ou te encorajar quando travar. O que você precisa?"
+
+  utter_despedida:
+    - text: "Até logo! Continue praticando — consistência é a chave para dominar programação! 👋"
+
+  utter_topico_definido:
+    - text: "Entendido! Estou aqui para te ajudar com {topico_atual}. Pode perguntar à vontade!"
+
+  # ── Dicas por tópico ────────────────────────────────────────────────────────
+
+  utter_dica_algoritmos:
+    - text: "💡 Dica: Pense em algoritmo como uma receita de bolo. Tem ingredientes (entradas), passos ordenados (processamento) e um resultado (saída). Todo algoritmo deve ser finito e sem ambiguidade — cada passo tem significado único."
+
+  utter_dica_variaveis:
+    - text: "💡 Dica: Variável é como uma caixa etiquetada na memória. Tem nome (etiqueta), tipo (formato da caixa) e valor (conteúdo). O tipo define o que pode ser armazenado: int para inteiros, float para decimais, string para texto, bool para verdadeiro/falso."
+
+  utter_dica_entrada_saida:
+    - text: "💡 Dica: Siga o modelo IPO — Input, Process, Output. Primeiro você lê os dados (entrada), processa, depois exibe o resultado (saída). Em Python: input() lê e sempre retorna string, então converta com int() ou float() antes de calcular."
+
+  utter_dica_operadores:
+    - text: "💡 Dica: Há três tipos principais. Aritméticos (+, -, *, /, %) fazem cálculos. Relacionais (==, !=, >, <, >=, <=) comparam e retornam verdadeiro/falso. Lógicos (E, OU, NÃO) combinam condições. Cuidado: == compara, = atribui!"
+
+  utter_dica_condicionais:
+    - text: "💡 Dica: Condicional é 'se isso, então aquilo'. O if verifica uma condição booleana. Se verdadeira, executa o bloco. O else executa quando a condição é falsa. elif adiciona condições extras. Sempre use == para comparar, nunca = sozinho."
+
+  utter_dica_repeticao:
+    - text: "💡 Dica: Use while quando não sabe quantas vezes repetir (baseado em condição). Use for quando sabe quantas vezes ou está percorrendo uma sequência. Todo loop precisa de uma condição de parada — sem ela, é loop infinito!"
+
+  utter_dica_funcoes:
+    - text: "💡 Dica: Função é um bloco reutilizável com nome, parâmetros (entradas) e retorno (saída). Parâmetros são variáveis locais — só existem dentro da função. Use return para devolver um valor. Sem return, a função retorna None."
+
+  utter_dica_vetores:
+    - text: "💡 Dica: Vetor (lista em Python) é uma sequência de valores indexados a partir de 0. lista[0] é o primeiro elemento, lista[-1] é o último. Para percorrer use for. len(lista) retorna o tamanho. Matrizes são listas de listas."
+
+  utter_dica_generica:
+    - text: "💡 Dica geral: Leia a questão com calma e identifique o que está sendo pedido. Elimine as alternativas obviamente erradas primeiro. Se ainda não sabe, o sistema vai reapresentar a questão para reforçar!"
+
+  # ── Não entendeu ────────────────────────────────────────────────────────────
+
+  utter_nao_entendeu_algoritmos:
+    - text: "Tranquilo! Algoritmos são a base de tudo. Tente associar com situações do dia a dia — uma receita, um roteiro de viagem, instruções de montagem. Todo processo que segue passos ordenados é um algoritmo. Quer que eu explique algum conceito específico?"
+
+  utter_nao_entendeu_variaveis:
+    - text: "Sem problema! Variáveis são como caixas de memória. O tipo mais confuso costuma ser a diferença entre int (inteiro) e float (decimal). Lembre: 7 é int, 7.0 é float. Precisa de mais alguma explicação?"
+
+  utter_nao_entendeu_condicionais:
+    - text: "Condicionais podem ser confusas no início! O ponto chave é: a condição dentro do if deve resultar em verdadeiro ou falso. Garanta que você sabe usar operadores relacionais (==, >, <) antes de avançar. Quer revisar operadores primeiro?"
+
+  utter_nao_entendeu_generico:
+    - text: "Não se preocupe, é completamente normal! Às vezes a dificuldade vem de um pré-requisito que ainda não está consolidado. O sistema vai adaptar as próximas questões para reforçar onde você tem mais dúvida. Continue tentando! 💪"
+
+  # ── Resposta incorreta ───────────────────────────────────────────────────────
+
+  utter_resposta_incorreta:
+    - text: "Errar faz parte do aprendizado! 💪 Leia com atenção a explicação da resposta correta — ela mostra exatamente onde estava o equívoco. O sistema vai trazer questões semelhantes para você reforçar esse conceito. Você consegue!"
+
+  utter_resposta_incorreta_encorajamento:
+    - text: "Não desanime! Cada erro é uma oportunidade de aprendizado. O importante é entender o porquê da resposta correta, não apenas decorá-la. Tente identificar qual conceito gerou a confusão."
+
+  # ── Resposta correta ─────────────────────────────────────────────────────────
+
+  utter_resposta_correta:
+    - text: "Excelente! 🎉 Você está consolidando o conhecimento. Continue assim — acertos consistentes aumentam sua proficiência no tópico!"
+
+  utter_resposta_correta_incentivo:
+    - text: "Muito bem! 🌟 Cada acerto é evidência de que você está aprendendo. Tente a próxima questão com a mesma atenção!"
+
+  # ── Fallback ─────────────────────────────────────────────────────────────────
+
+  utter_fallback:
+    - text: "Não entendi bem sua mensagem 🤔 Posso te ajudar com:\n• **Dica** — sobre a questão atual\n• **Não entendi** — explicação do conceito\n• **Errei** — encorajamento após erro\n• **Acertei** — celebrar um acerto"
+
+actions:
+  - action_set_topic
+  - action_give_hint
+  - action_explain
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

@@ -15,6 +15,8 @@ export interface Topic {
   relations: Relation[];
 }
 
+export type QuestionKind = "conceito" | "trace" | "completar";
+
 export interface Question {
   id: number;
   diff: Difficulty;
@@ -23,6 +25,8 @@ export interface Question {
   correct: number;
   explain: string;
   wrongFeedback?: Record<number, string>;
+  kind?: QuestionKind;   // ausente = "conceito" (compatibilidade)
+  code?: string;         // trecho de código exibido em bloco monoespaçado
 }
 
 export interface HistoryEntry {
@@ -52,6 +56,32 @@ export interface Misconception {
 }
 
 export type PedagogyAction = "regredir" | "reforçar" | "avançar" | "desbloquear";
+
+export interface DiagnosticResult {
+  topicId: string;
+  correct: boolean;
+}
+
+// ─── Camada de ensino (lições) ───────────────────────────────────────────────
+
+export interface LessonSection {
+  heading: string;
+  body: string;
+}
+
+export interface WorkedExample {
+  title: string;
+  code: string;
+  steps: string[]; // explicação passo a passo
+}
+
+export interface Lesson {
+  topicId: string;
+  intro: string;
+  sections: LessonSection[];
+  example?: WorkedExample;
+  keyPoints: string[];
+}
 
 export interface Recommendation {
   type: "revisar_prereq" | "reforçar_conceito" | "proximo_topico";

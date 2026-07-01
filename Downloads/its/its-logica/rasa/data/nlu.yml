@@ -22,10 +22,138 @@ nlu:
     - até mais
     - falou
     - até
+    - até a próxima
+    - vou sair
+    - encerrar
+
+- intent: agradecer
+  examples: |
     - obrigado
+    - obrigada
     - valeu
+    - muito obrigado
     - obrigado pela ajuda
-    - foi ótimo
+    - vlw
+    - thanks
+    - agradeço
+    - você ajudou muito
+    - perfeito obrigado
+    - show valeu
+
+- intent: pedir_exemplo
+  examples: |
+    - me dá um exemplo
+    - me mostra um exemplo
+    - tem um exemplo
+    - pode dar um exemplo
+    - exemplo de variável
+    - exemplo de função
+    - exemplo de condicional
+    - exemplo de for
+    - exemplo de while
+    - exemplo de vetor
+    - me mostra um código
+    - mostra como escrever
+    - como ficaria no código
+    - me dá um exemplo prático
+    - exemplo de operadores
+    - exemplo de algoritmo
+
+- intent: aplicacao_real
+  examples: |
+    - pra que serve isso
+    - para que serve
+    - onde uso isso
+    - qual a aplicação disso
+    - pra que serve na prática
+    - onde isso é usado
+    - isso é usado no mundo real
+    - qual a utilidade disso
+    - onde aplico isso
+    - pra que serve condicional
+    - pra que serve função
+    - pra que servem vetores
+    - onde uso repetição
+    - qual a utilidade de variável
+    - isso serve pra quê
+    - onde isso aparece na vida real
+
+- intent: quero_praticar
+  examples: |
+    - me faça uma pergunta
+    - me faz uma pergunta
+    - quero praticar
+    - quero treinar
+    - me teste
+    - pode me testar
+    - manda uma questão
+    - me pergunta algo
+    - bora praticar
+    - quero responder uma questão
+    - me dá uma questão
+    - faz uma pergunta pra mim
+    - outra
+    - outra pergunta
+    - mais uma
+    - próxima
+    - quero outra
+    - manda outra
+
+- intent: responder_quiz
+  examples: |
+    - a
+    - b
+    - c
+    - d
+    - letra a
+    - letra b
+    - letra c
+    - letra d
+    - alternativa a
+    - alternativa b
+    - opção c
+    - é a a
+    - é a b
+    - acho que é c
+    - resposta d
+    - a resposta é a
+    - eu escolho b
+    - vou de c
+
+- intent: desanimo
+  examples: |
+    - tô desanimado
+    - estou desanimado
+    - quero desistir
+    - não vou conseguir
+    - isso não é pra mim
+    - tô frustrado
+    - tô cansado disso
+    - não nasci pra programar
+    - acho que não consigo
+    - tô achando muito difícil pra mim
+
+- intent: o_que_estudar
+  examples: |
+    - o que devo estudar
+    - por onde começo
+    - o que estudar agora
+    - qual o próximo passo
+    - o que estudar primeiro
+    - o que eu estudo
+    - qual a ordem dos tópicos
+    - por onde eu começo a estudar
+    - o que vem depois
+
+- intent: e_dificil
+  examples: |
+    - isso é difícil
+    - programação é difícil
+    - é complicado
+    - isso é muito difícil
+    - programar é difícil
+    - lógica de programação é difícil
+    - é difícil aprender isso
 
 - intent: pedir_dica
   examples: |
@@ -112,6 +240,70 @@ nlu:
     - mandei bem
     - acertei!
     - consegui acertar
+
+- intent: perguntar_conceito
+  examples: |
+    - o que é uma variável
+    - o que é variável
+    - o que são tipos de dado
+    - o que é um int
+    - o que é float
+    - o que é uma string
+    - o que é booleano
+    - o que é um algoritmo
+    - o que é pseudocódigo
+    - o que é um fluxograma
+    - para que serve o input
+    - o que faz o print
+    - o que é operador aritmético
+    - o que são operadores relacionais
+    - o que são operadores lógicos
+    - o que faz o operador módulo
+    - para que serve o %
+    - o que é o if
+    - como funciona o if
+    - o que é condicional
+    - para que serve o else
+    - o que é elif
+    - como funciona o while
+    - o que é o while
+    - como funciona o for
+    - o que é o for
+    - o que é range
+    - para que serve o break
+    - o que faz o continue
+    - o que é loop infinito
+    - o que é uma função
+    - para que serve uma função
+    - o que é um parâmetro
+    - o que é argumento
+    - para que serve o return
+    - o que faz o return
+    - o que é escopo
+    - o que é recursão
+    - o que é um vetor
+    - o que é uma lista
+    - o que é um array
+    - o que é índice
+    - o que é uma matriz
+    - para que serve o append
+    - qual a diferença entre while e for
+    - diferença entre == e =
+    - qual a diferença entre int e float
+    - diferença entre parâmetro e argumento
+    - qual a diferença entre break e continue
+    - diferença entre print e return
+    - qual a diferença entre lista e tupla
+    - qual a diferença entre algoritmo e pseudocódigo
+    - diferença entre algoritmo e pseudoalgoritmo
+    - o que é pseudocódigo
+    - qual a diferença entre variável e constante
+    - diferença entre variavel e constante
+    - o que é uma constante
+    - me explica o que é uma variável
+    - explica o conceito de função
+    - como funciona o return
+    - pra que serve o while
 
 - intent: definir_topico
   examples: |

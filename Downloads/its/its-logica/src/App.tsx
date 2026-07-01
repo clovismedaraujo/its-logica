@@ -7,6 +7,8 @@ import ProfBar from "./components/ProfBar";
 import MapView from "./components/MapView";
 import QuizView from "./components/QuizView";
 import StatsView from "./components/StatsView";
+import DiagnosticView from "./components/DiagnosticView";
+import LessonView from "./components/LessonView";
 import type { Recommendation } from "./types";
 
 const TOTAL_QUESTIONS = Object.values(QUESTIONS).reduce((a, b) => a + b.length, 0);
@@ -35,16 +37,31 @@ const REC_BG: Record<Recommendation["type"], string> = {
 };
 
 export default function App() {
-  const { model, history, lastFeedback, handleAnswer, recommendations } = useProgress();
+  const { model, history, lastFeedback, handleAnswer, recommendations, seedModel } = useProgress();
   const [activeTopic, setActiveTopic] = useState<string | null>(null);
+  const [practiceMode, setPracticeMode] = useState<"licao" | "quiz">("licao");
   const [tab, setTab] = useState<Tab>("mapa");
+  const [phase, setPhase] = useState<"diagnostico" | "app">("diagnostico");
 
   const unlockedCount = TOPICS.filter(t => isUnlocked(t.id, model)).length;
   const avgProf = Math.round(Object.values(model).reduce((a, b) => a + b, 0) / TOPICS.length);
 
   function goToTopic(id: string) {
     setActiveTopic(id);
+    setPracticeMode("licao"); // sempre começa pela lição (ensino antes da prática)
     setTab("praticar");
+  }
+
+  // Diagnóstico inicial — semeia o modelo do aluno antes de praticar
+  if (phase === "diagnostico") {
+    return (
+      <div style={{ padding: "0 16px" }}>
+        <DiagnosticView
+          onComplete={(seeded) => { seedModel(seeded); setPhase("app"); }}
+          onSkip={() => setPhase("app")}
+        />
+      </div>
+    );
   }
 
   return (
@@ -79,6 +96,15 @@ export default function App() {
               {lastFeedback.correct ? "▲" : "▼"} {Math.abs(lastFeedback.delta)}% proficiência
             </div>
           )}
+
+          <button
+            onClick={() => { setActiveTopic(null); setTab("mapa"); setPhase("diagnostico"); }}
+            title="Refazer o diagnóstico inicial"
+            style={{ padding: "6px 12px", fontSize: 12, gap: 5 }}
+          >
+            <i className="ti ti-refresh" style={{ fontSize: 13 }} aria-hidden />
+            Refazer diagnóstico
+          </button>
         </div>
 
         <div style={{ marginBottom: 12 }}>
@@ -163,7 +189,7 @@ export default function App() {
               return (
                 <div
                   key={t.id}
-                  onClick={() => setActiveTopic(t.id)}
+                  onClick={() => { setActiveTopic(t.id); setPracticeMode("licao"); }}
                   className="card card-clickable"
                   style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px" }}
                 >
@@ -183,13 +209,22 @@ export default function App() {
           </div>
         )}
 
-        {tab === "praticar" && activeTopic && (
+        {tab === "praticar" && activeTopic && practiceMode === "licao" && (
+          <LessonView
+            topicId={activeTopic}
+            onPractice={() => setPracticeMode("quiz")}
+            onBack={() => setActiveTopic(null)}
+          />
+        )}
+
+        {tab === "praticar" && activeTopic && practiceMode === "quiz" && (
           <QuizView
             topicId={activeTopic}
             model={model}
             history={history}
             onAnswer={handleAnswer}
             onBack={() => setActiveTopic(null)}
+            onReviewLesson={() => setPracticeMode("licao")}
           />
         )}
 

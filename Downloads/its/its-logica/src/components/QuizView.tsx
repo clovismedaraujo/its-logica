@@ -3,6 +3,7 @@ import { TOPICS, LEVEL_COLORS } from "../data/topics";
 import ChatWidget from "./ChatWidget";
 import { buildQueue } from "../logic/queue";
 import { GAIN, LOSS } from "../logic/model";
+import { getStreak, streakMilestone } from "../logic/streak";
 import { getPedagogyAction, getPedagogyFeedback } from "../logic/pedagogy";
 import type { Model, HistoryEntry, Question } from "../types";
 
@@ -17,15 +18,21 @@ const ACTION_BADGE: Record<string, { label: string; color: string; bg: string }>
   desbloquear: { label: "Dominando",      color: "#3730a3", bg: "#e0e7ff" },
 };
 
+const KIND_BADGE: Record<string, { label: string; icon: string }> = {
+  trace:     { label: "Rastreie o código", icon: "ti-player-track-next" },
+  completar: { label: "Complete o código", icon: "ti-code-dots" },
+};
+
 interface Props {
   topicId: string;
   model: Model;
   history: HistoryEntry[];
   onAnswer: (payload: { topicId: string; qId: number; correct: boolean; delta: number; chosen: number }) => void;
   onBack: () => void;
+  onReviewLesson?: () => void;
 }
 
-export default function QuizView({ topicId, model, history, onAnswer, onBack }: Props) {
+export default function QuizView({ topicId, model, history, onAnswer, onBack, onReviewLesson }: Props) {
   const [selected, setSelected] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [queue, setQueue] = useState<Question[]>(() => buildQueue(topicId, model, history));
@@ -49,16 +56,37 @@ export default function QuizView({ topicId, model, history, onAnswer, onBack }: 
   const handleNext = () => {
     if (selected === null) return;
     const correct = selected === question.correct;
-    const delta = correct ? GAIN[question.diff] : -LOSS;
+    const delta = correct ? GAIN[question.diff] : -LOSS[question.diff];
     onAnswer({ topicId, qId: question.id, correct, delta, chosen: selected });
     const nextHistory: HistoryEntry[] = [...history, { topicId, qId: question.id, correct, delta, chosen: selected }];
-    const remaining = queue.slice(1);
+
+    let remaining = queue.slice(1);
+
+    // Reinserir questão errada após 3 questões
+    if (!correct) {
+      const insertAt = Math.min(3, remaining.length);
+      remaining = [
+        ...remaining.slice(0, insertAt),
+        question,
+        ...remaining.slice(insertAt),
+      ];
+    }
+
     setQueue(remaining.length > 0 ? remaining : buildQueue(topicId, model, nextHistory));
     setSelected(null);
     setSubmitted(false);
   };
 
   const isCorrect = submitted && selected === question.correct;
+
+  // Erros acumulados neste tópico (para re-ensino direcionado)
+  const wrongCountTopic = history.filter(h => h.topicId === topicId && !h.correct).length;
+
+  // Sequência de acertos (deriva do histórico)
+  const streak = getStreak(history);
+  // Ao acertar, projeta a sequência que ESTA resposta produz (histórico só atualiza no "Próxima")
+  const projectedStreak = isCorrect ? streak.current + 1 : 0;
+  const milestone = isCorrect ? streakMilestone(projectedStreak) : null;
 
   // Feedback pedagógico contextual
   const pedagogyMessage = submitted ? getPedagogyFeedback(pL, isCorrect) : null;
@@ -72,6 +100,12 @@ export default function QuizView({ topicId, model, history, onAnswer, onBack }: 
           <i className="ti ti-arrow-left" style={{ fontSize: 14 }} aria-hidden />
           Voltar
         </button>
+        {onReviewLesson && (
+          <button onClick={onReviewLesson} style={{ padding: "5px 12px", fontSize: 13 }} title="Rever a aula deste tópico">
+            <i className="ti ti-book" style={{ fontSize: 14 }} aria-hidden />
+            Rever lição
+          </button>
+        )}
         <span style={{
           fontSize: 13, fontWeight: 600, color: col.text,
           background: col.bg, border: `1px solid ${col.border}`,
@@ -88,6 +122,21 @@ export default function QuizView({ topicId, model, history, onAnswer, onBack }: 
           {actionBadge.label} · {Math.round(pL)}%
         </span>
 
+        {/* Sequência de acertos */}
+        {streak.current >= 2 && (
+          <span
+            title={`Recorde: ${streak.best} seguidos`}
+            style={{
+              fontSize: 12, fontWeight: 700, padding: "3px 10px", borderRadius: 20,
+              background: "#fff7ed", color: "#c2410c", border: "1px solid #fed7aa",
+              display: "flex", alignItems: "center", gap: 4,
+            }}
+          >
+            <i className="ti ti-flame" style={{ fontSize: 13 }} aria-hidden />
+            {streak.current}
+          </span>
+        )}
+
         <span style={{
           marginLeft: "auto", fontSize: 12, fontWeight: 500,
           color: DIFF_COLOR[question.diff],
@@ -100,9 +149,49 @@ export default function QuizView({ topicId, model, history, onAnswer, onBack }: 
 
       {/* Question card */}
       <div className="card" style={{ padding: "22px 20px 18px" }}>
+        {/* Badge de exercício de código */}
+        {question.kind && KIND_BADGE[question.kind] && (
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            fontSize: 11, fontWeight: 600, color: "#3730a3",
+            background: "#e0e7ff", padding: "3px 10px", borderRadius: 6,
+            marginBottom: 14,
+          }}>
+            <i className={`ti ${KIND_BADGE[question.kind].icon}`} style={{ fontSize: 13 }} aria-hidden />
+            {KIND_BADGE[question.kind].label}
+          </div>
+        )}
+
         <p style={{ fontSize: 15, fontWeight: 600, margin: "0 0 18px", lineHeight: 1.55, color: "var(--text-h)" }}>
           {question.text}
         </p>
+
+        {/* Bloco de código */}
+        {question.code && (
+          <pre style={{
+            margin: "0 0 18px", padding: "14px 16px",
+            background: "#1e1e2e", borderRadius: 8,
+            border: "1px solid #313244", overflowX: "auto",
+            fontSize: 13.5, lineHeight: 1.65,
+            fontFamily: "'JetBrains Mono', 'Fira Code', Consolas, monospace",
+            color: "#cdd6f4", whiteSpace: "pre",
+          }}>
+            <code>
+              {question.code.split("____").map((part, i, arr) => (
+                <span key={i}>
+                  {part}
+                  {i < arr.length - 1 && (
+                    <span style={{
+                      background: "#f9e2af", color: "#1e1e2e",
+                      padding: "1px 8px", borderRadius: 4, fontWeight: 700,
+                      margin: "0 2px",
+                    }}>____</span>
+                  )}
+                </span>
+              ))}
+            </code>
+          </pre>
+        )}
 
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {question.opts.map((opt, i) => {
@@ -197,6 +286,42 @@ export default function QuizView({ topicId, model, history, onAnswer, onBack }: 
               }}>
                 <i className="ti ti-brain" style={{ fontSize: 13, flexShrink: 0 }} aria-hidden />
                 {pedagogyMessage}
+              </div>
+            )}
+
+            {/* Marco de sequência de acertos */}
+            {milestone && (
+              <div style={{
+                fontSize: 13, fontWeight: 700, color: "#c2410c",
+                background: "#ffedd5", border: "1px solid #fdba74",
+                padding: "8px 12px", borderRadius: 6,
+                display: "flex", gap: 7, alignItems: "center",
+              }}>
+                <i className="ti ti-flame" style={{ fontSize: 16, flexShrink: 0 }} aria-hidden />
+                {milestone}
+              </div>
+            )}
+
+            {/* Re-ensino no erro — retoma a lição do conceito */}
+            {!isCorrect && onReviewLesson && (
+              <div style={{
+                display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap",
+                fontSize: 12.5, color: "#92400e",
+                background: "#fffbeb", border: "1px solid #fde68a",
+                padding: "8px 12px", borderRadius: 6,
+              }}>
+                <i className="ti ti-book" style={{ fontSize: 15, flexShrink: 0 }} aria-hidden />
+                <span style={{ flex: 1 }}>
+                  {wrongCountTopic >= 2
+                    ? "Você errou algumas vezes neste tópico. Que tal rever a aula antes de continuar?"
+                    : "Quer relembrar o conceito? Reveja a aula deste tópico."}
+                </span>
+                <button
+                  onClick={onReviewLesson}
+                  style={{ padding: "5px 12px", fontSize: 12, background: "#fff", border: "1px solid #fbbf24", color: "#92400e", flexShrink: 0 }}
+                >
+                  Rever a lição
+                </button>
               </div>
             )}
           </div>

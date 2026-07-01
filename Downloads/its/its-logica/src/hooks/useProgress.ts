@@ -39,5 +39,10 @@ export function useProgress() {
     [model]
   );
 
-  return { model, history, lastFeedback, handleAnswer, recommendations };
+  // Semeia o modelo a partir do diagnóstico inicial
+  const seedModel = useCallback((seeded: Model) => {
+    setModel(seeded);
+  }, []);
+
+  return { model, history, lastFeedback, handleAnswer, recommendations, seedModel };
 }

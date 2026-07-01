@@ -27,6 +27,51 @@ rules:
     - intent: nao_entendeu
     - action: action_explain
 
+- rule: Perguntar conceito
+  steps:
+    - intent: perguntar_conceito
+    - action: action_explain_concept
+
+- rule: Pedir exemplo
+  steps:
+    - intent: pedir_exemplo
+    - action: action_dar_exemplo
+
+- rule: Aplicacao real
+  steps:
+    - intent: aplicacao_real
+    - action: action_aplicacao
+
+- rule: Quero praticar
+  steps:
+    - intent: quero_praticar
+    - action: action_fazer_pergunta
+
+- rule: Responder quiz
+  steps:
+    - intent: responder_quiz
+    - action: action_avaliar_quiz
+
+- rule: Agradecer
+  steps:
+    - intent: agradecer
+    - action: utter_agradecer
+
+- rule: Desanimo
+  steps:
+    - intent: desanimo
+    - action: utter_desanimo
+
+- rule: O que estudar
+  steps:
+    - intent: o_que_estudar
+    - action: utter_o_que_estudar
+
+- rule: E dificil
+  steps:
+    - intent: e_dificil
+    - action: utter_e_dificil
+
 - rule: Resposta incorreta
   steps:
     - intent: resposta_incorreta

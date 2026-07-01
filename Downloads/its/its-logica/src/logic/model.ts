@@ -3,7 +3,10 @@ import { QUESTIONS } from "../data/questions";
 import type { Model, HistoryEntry, Difficulty, Misconception } from "../types";
 
 export const GAIN: Record<Difficulty, number> = { basica: 10, intermediaria: 15, avancada: 20 };
-export const LOSS = 5;
+
+// Penalidade proporcional à dificuldade: errar o básico sinaliza lacuna
+// fundamental (pesa mais); errar o avançado é mais perdoável (pesa menos).
+export const LOSS: Record<Difficulty, number> = { basica: 10, intermediaria: 6, avancada: 3 };
 export const UNLOCK_THRESHOLD = 70;
 export const ADVANCED_THRESHOLD = 90;
 

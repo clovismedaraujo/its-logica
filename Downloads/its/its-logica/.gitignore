@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.vercel
+
+# Rasa — regenerados na máquina (train)
+rasa/models/
+rasa/.rasa/
+**/__pycache__/
+*.pyc
+
+# Variáveis de ambiente / segredos
+.env
+.env.local

@@ -1,6 +1,7 @@
 import ProfBar from "./ProfBar";
 import { TOPICS, LEVEL_COLORS } from "../data/topics";
 import { isUnlocked, UNLOCK_THRESHOLD, getMisconceptions } from "../logic/model";
+import { getStreak } from "../logic/streak";
 import type { Model, HistoryEntry } from "../types";
 
 interface Props {
@@ -14,18 +15,20 @@ export default function StatsView({ model, history }: Props) {
   const corretas = history.filter(h => h.correct).length;
   const taxa = total > 0 ? Math.round((corretas / total) * 100) : 0;
   const avgProf = Math.round(Object.values(model).reduce((a, b) => a + b, 0) / TOPICS.length);
+  const streak = getStreak(history);
 
   const stats = [
     { label: "Questões respondidas", value: String(total), icon: "ti-clipboard-list" },
     { label: "Taxa de acerto", value: taxa + "%", icon: "ti-target" },
     { label: "Proficiência média", value: avgProf + "%", icon: "ti-trending-up" },
+    { label: "Melhor sequência", value: `🔥 ${streak.best}`, icon: "ti-flame" },
   ];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
       {/* Stat cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10 }}>
         {stats.map(({ label, value, icon }) => (
           <div key={label} className="card" style={{ padding: "16px 14px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>

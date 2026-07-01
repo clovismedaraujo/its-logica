@@ -5,6 +5,15 @@ intents:
   - despedida
   - pedir_dica
   - nao_entendeu
+  - perguntar_conceito
+  - pedir_exemplo
+  - aplicacao_real
+  - quero_praticar
+  - responder_quiz
+  - agradecer
+  - desanimo
+  - o_que_estudar
+  - e_dificil
   - resposta_incorreta
   - resposta_correta
   - definir_topico
@@ -19,6 +28,23 @@ slots:
     mappings:
       - type: from_entity
         entity: topico
+
+  # Estado do quiz pelo chat (preenchido por ações)
+  quiz_correta:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+  quiz_resposta:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+  quiz_explicacao:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
 
 responses:
   utter_saudacao:
@@ -89,15 +115,34 @@ responses:
   utter_resposta_correta_incentivo:
     - text: "Muito bem! 🌟 Cada acerto é evidência de que você está aprendendo. Tente a próxima questão com a mesma atenção!"
 
+  # ── Conversa e motivação ─────────────────────────────────────────────────────
+
+  utter_agradecer:
+    - text: "Por nada! 😊 Tô aqui pra isso. Quer uma dica, um exemplo, ou que eu te faça uma pergunta pra praticar?"
+
+  utter_desanimo:
+    - text: "Ei, respira — todo programador já se sentiu assim. 💪 Aprender a programar é como aprender um idioma: confuso no começo, natural com a prática. Vamos por partes: me diz um conceito que tá te travando e a gente destrava junto. Você consegue!"
+
+  utter_o_que_estudar:
+    - text: "Boa pergunta! A ordem natural é: **Algoritmos** → **Variáveis** → **Entrada/Saída** → **Operadores** → **Condicionais** → **Repetição** → **Funções** → **Vetores**. Cada um usa o anterior. Em que ponto você está? Posso te explicar ou te testar nesse tópico."
+
+  utter_e_dificil:
+    - text: "No começo parece, mas é mais questão de prática do que de talento! 🌱 Programação é uma habilidade que se constrói errando e tentando de novo. Comece pelos fundamentos, vá no seu ritmo, e use o chat sempre que travar. Quer começar com uma pergunta fácil pra ganhar confiança?"
+
   # ── Fallback ─────────────────────────────────────────────────────────────────
 
   utter_fallback:
-    - text: "Não entendi bem sua mensagem 🤔 Posso te ajudar com:\n• **Dica** — sobre a questão atual\n• **Não entendi** — explicação do conceito\n• **Errei** — encorajamento após erro\n• **Acertei** — celebrar um acerto"
+    - text: "Não entendi bem 🤔 Posso te ajudar com:\n• **Dica** — \"me dá uma dica\"\n• **Conceito** — \"o que é uma variável?\"\n• **Exemplo** — \"me dá um exemplo de função\"\n• **Aplicação** — \"pra que serve condicional?\"\n• **Praticar** — \"me faça uma pergunta\""
 
 actions:
   - action_set_topic
   - action_give_hint
   - action_explain
+  - action_explain_concept
+  - action_dar_exemplo
+  - action_aplicacao
+  - action_fazer_pergunta
+  - action_avaliar_quiz
 
 session_config:
   session_expiration_time: 60

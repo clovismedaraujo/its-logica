@@ -10,7 +10,7 @@ interface Props {
   topicLabel: string;
 }
 
-const RASA_URL = "http://localhost:5005/webhooks/rest/webhook";
+const RASA_URL = "https://its-logica-production.up.railway.app/webhooks/rest/webhook";
 const SENDER_ID = "student_" + Math.random().toString(36).slice(2, 8);
 
 export default function ChatWidget({ topicId, topicLabel }: Props) {

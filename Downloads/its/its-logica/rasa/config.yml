@@ -1,6 +1,5 @@
 recipe: default.v1
 language: pt
-
 pipeline:
 - name: WhitespaceTokenizer
 - name: RegexFeaturizer
@@ -11,17 +10,16 @@ pipeline:
   min_ngram: 1
   max_ngram: 4
 - name: DIETClassifier
-  epochs: 150
+  epochs: 50
   constrain_similarities: true
 - name: EntitySynonymMapper
 - name: FallbackClassifier
   threshold: 0.35
   ambiguity_threshold: 0.1
-
 policies:
 - name: MemoizationPolicy
 - name: RulePolicy
 - name: TEDPolicy
-  max_history: 5
-  epochs: 100
+  max_history: 3
+  epochs: 50
 assistant_id: 20260622-150640-yellow-spline

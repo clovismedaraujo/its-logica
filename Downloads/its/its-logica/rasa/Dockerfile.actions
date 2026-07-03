@@ -1,0 +1,7 @@
+FROM rasa/rasa-sdk:3.6.2
+
+WORKDIR /app/actions
+
+COPY actions/ .
+
+CMD ["start", "--actions", "actions", "--port", "5055"]

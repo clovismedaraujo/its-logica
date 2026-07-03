@@ -1,7 +1,7 @@
 FROM rasa/rasa-sdk:3.6.2
 
-WORKDIR /app/actions
+USER root
 
-COPY actions/ .
+COPY actions/ /app/actions
 
 CMD ["start", "--actions", "actions", "--port", "5055"]

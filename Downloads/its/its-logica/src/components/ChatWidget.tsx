@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 
 interface Message {
   from: "user" | "bot";
@@ -140,7 +141,7 @@ export default function ChatWidget({ topicId, topicLabel }: Props) {
               whiteSpace: "pre-wrap",
             }}
           >
-            {msg.text}
+            {msg.from === "bot" ? <ReactMarkdown>{msg.text}</ReactMarkdown> : msg.text}
           </div>
         ))}
 

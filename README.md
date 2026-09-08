@@ -2,7 +2,6 @@
 
 Aplicação web (React + TypeScript) que ensina lógica de programação de forma adaptativa: mapeia o conhecimento do aluno em um grafo de tópicos com pré-requisitos, recomenda o que estudar em seguida e conta com um tutor conversacional (chatbot construído em Rasa) para tirar dúvidas em tempo real.
 
-
 ## Visão geral
 
 O projeto simula um **Intelligent Tutoring System (ITS)**:
@@ -59,14 +58,19 @@ npm run test       # roda os testes com Vitest
 
 ### Tutor (Rasa)
 
-O chat do tutor depende de um servidor Rasa rodando localmente (ou aponta para o endpoint em produção configurado em `ChatWidget.tsx`). Para subir localmente:
+Passo a passo para rodar tudo localmente:
 
-```bash
-cd its/its-logica/rasa
-docker compose up
-```
+1. **Treinar o modelo** (dentro de `rasa/`):
+   ```bash
+   docker run --rm -v "$PWD":/app rasa/rasa:3.6.20-full train
+   ```
+   Isso gera o `.tar.gz` em `rasa/models/`.
 
-Isso sobe o servidor Rasa e o servidor de ações customizadas usados pelo bot. Sem o Rasa ativo, o widget de chat exibe um aviso de "tutor offline".
+2. **Subir os containers**:
+   ```bash
+   docker compose up
+   ```
+   Sobe o `action-server` (porta 5055) e o servidor Rasa (porta 5005, com API e CORS habilitados).
 
 ## Como funciona a adaptação
 
@@ -74,4 +78,3 @@ Isso sobe o servidor Rasa e o servidor de ações customizadas usados pelo bot. 
 - Um tópico é desbloqueado quando todos os seus pré-requisitos atingem o `UNLOCK_THRESHOLD` de proficiência.
 - Acertar uma questão soma pontos proporcionais à dificuldade; errar subtrai mais pontos quanto mais básico for o conceito, sinalizando lacunas fundamentais.
 - Erros repetidos na mesma questão/alternativa são agrupados como "concepções equivocadas" e usados para gerar recomendações direcionadas.
-
